@@ -42,11 +42,17 @@ class TelecomNetworkSimulator:
                 packet_loss = np.clip(bandwidth_usage / 1000, 0, 5)
                 signal_strength = np.random.uniform(70, 100)
 
-                congestion = 1 if (
+                base_condition = (
                     bandwidth_usage > 380 or
                     latency > 23 or
                     packet_loss > 0.8
-                ) else 0
+                )   
+
+                # Add small randomness (real-world uncertainty)
+                if base_condition:
+                    congestion = np.random.choice([1, 0], p=[0.9, 0.1])
+                else:
+                    congestion = np.random.choice([0, 1], p=[0.95, 0.05])
 
                 data.append([
                     tower_id,
